@@ -11,7 +11,17 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+
+    # 4 Parameters (http://guides.rubyonrails.org/action_controller_overview.html)
+    if params[:sort] == "title"
+      @movies = Movie.order("title")
+      @t_highlight = "hilite"
+    elsif params[:sort] == "release_date"
+      @movies = Movie.order("release_date")
+      @m_highlight = "hilite"
+    else
+      @movies = Movie.all
+    end
   end
 
   def new
