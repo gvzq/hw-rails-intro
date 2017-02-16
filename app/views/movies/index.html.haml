@@ -6,7 +6,7 @@
   - @all_ratings.each do |rating|
     = rating
     -# checked for persistance
-    = check_box_tag "ratings[#{rating}]", 1, (checked = true if @all_ratings.include?(rating))
+    = check_box_tag "ratings[#{rating}]", 1, (checked = true if @ratings.include?(rating))
   = submit_tag 'Refresh', :id => "ratings_submit"
 
 %table#movies

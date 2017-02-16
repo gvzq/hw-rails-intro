@@ -21,22 +21,27 @@ class MoviesController < ApplicationController
     #s.t. ratings.key (https://ruby-doc.org/core-2.2.3/Hash.html)
 
     # 4 Parameters (http://guides.rubyonrails.org/action_controller_overview.html)
-    if params[:sort] == "title"
-      # @movies = Movie.order("title")
-      @t_highlight = "hilite"
-    elsif params[:sort] == "release_date"
-      # @movies = Movie.order("release_date")
-      @m_highlight = "hilite"
+    if !@sort.nil?
+      @movies = Movie.order(@sort)
+      if @sort == "title"
+        @t_highlight = "hilite"
+      elsif @sort == "release_date"
+        @m_highlight = "hilite"
+      end
+    end
+
+    if !@ratings.nil?
+      @movies.where!({rating: @ratings.keys})
+    else
+      @ratings = @all_ratings
     end
 
     # this should work when there is a sort and rating
     if !@sort.nil? and !@ratings.nil?
-      @movies = Movie.where!({rating: @ratings.keys}).order(@sort)
+      # @movies = Movie.where!({rating: @ratings}).order(@sort)
+      # @movies.where!({rating: @ratings.keys})
     end
 
-    if !@ratings.nil?
-      @movies.where({rating: @ratings.keys})
-    end
   end
 
   def new
