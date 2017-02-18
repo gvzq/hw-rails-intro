@@ -12,20 +12,29 @@ class MoviesController < ApplicationController
 
   def index
 
-    @sort = params[:sort]
+    @sort = params[:sort] ? params[:sort] : session[:sort]
+    @ratings = params[:ratings] ? params[:ratings] : session[:ratings] # ratings=>{"G"=>"1", "R"=>"1"} those checked
+
     @movies = Movie.all
-    @ratings = params[:ratings]# ratings=>{"G"=>"1", "R"=>"1"} those checked
     @all_ratings = Movie.all_ratings
 
     #Hash use the key function
     #s.t. ratings.key (https://ruby-doc.org/core-2.2.3/Hash.html)
 
     # 4 Parameters (http://guides.rubyonrails.org/action_controller_overview.html)
-    if !@sort.nil?
-      @movies = Movie.order(@sort)
+    if @sort.nil?
       if @sort == "title"
-        @t_highlight = "hilite"
+        session[:sort] = "title"
       elsif @sort == "release_date"
+        session[:sort] = "release_date"
+      end
+    end
+
+    if session[:sort].nil?
+      @movies = Movie.order(session[:sort])
+      if session[:sort] == "title"
+        @t_highlight = "hilite"
+      elsif session[:sort] == "release_date"
         @m_highlight = "hilite"
       end
     end
@@ -33,15 +42,17 @@ class MoviesController < ApplicationController
     if !@ratings.nil?
       @movies.where!({rating: @ratings.keys})
     else
-      @ratings = @all_ratings
+      @ratings = Movie.all_ratings
     end
 
     # this should work when there is a sort and rating
     if !@sort.nil? and !@ratings.nil?
-      # @movies = Movie.where!({rating: @ratings}).order(@sort)
+      @movies = Movie.where!({rating: @ratings}).order(@sort)
       # @movies.where!({rating: @ratings.keys})
     end
 
+    session[:sort] = @sort
+    session[:ratings] = @ratings
   end
 
   def new
