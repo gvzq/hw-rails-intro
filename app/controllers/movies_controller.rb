@@ -39,16 +39,17 @@ class MoviesController < ApplicationController
       end
     end
 
+    # this should work when there is a sort and rating
+    if !@sort.nil?
+      # @movies = Movie.where!({rating: @ratings}).order(@sort)
+      # @movies.where!({rating: @ratings.keys})
+       @movies = Movie.order(@sort)
+    end
+
     if !@ratings.nil?
       @movies.where!({rating: @ratings.keys})
     else
       @ratings = Movie.all_ratings
-    end
-
-    # this should work when there is a sort and rating
-    if !@sort.nil? and !@ratings.nil?
-      # @movies = Movie.where!({rating: @ratings}).order(@sort)
-      # @movies.where!({rating: @ratings.keys})
     end
 
     session[:sort] = @sort
