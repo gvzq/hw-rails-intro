@@ -47,7 +47,7 @@ class MoviesController < ApplicationController
 
     # this should work when there is a sort and rating
     if !@sort.nil? and !@ratings.nil?
-      @movies = Movie.where!({rating: @ratings}).order(@sort)
+      # @movies = Movie.where!({rating: @ratings}).order(@sort)
       # @movies.where!({rating: @ratings.keys})
     end
 

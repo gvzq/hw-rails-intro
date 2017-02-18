@@ -4,7 +4,9 @@ module MoviesHelper
     count.odd? ?  "odd" :  "even"
   end
 
-  # def check_box_tag(rating)
-  #   return rating
-  # end
+  def check_box_highlight(sec)
+    if session[:sort] == sec
+      return "hilite"
+    end
+  end
 end
